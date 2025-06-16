@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cadastro de Atendentes</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #f0fdf4;
+      color: #212529;
+    }
+
+    .form-label {
+      font-weight: 500;
+    }
+
+    .table-container {
+      overflow-x: auto;
+      margin-top: 20px;
+    }
+
+    select.form-select {
+      min-width: 100px;
+      font-size: 0.9rem;
+    }
+
+    th, td {
+      text-align: center;
+      vertical-align: middle;
+      min-width: 120px;
+    }
+
+    /* Cores das atividades */
+    .activity-blip { background-color: #81c784 !important; color: #000 !important; }
+    .activity-email { background-color: #64b5f6 !important; color: #000 !important; }
+    .activity-phone { background-color: #4db6ac !important; color: #000 !important; }
+    .activity-bko { background-color: #ba68c8 !important; color: #000 !important; }
+    .activity-folga { background-color: #e57373 !important; color: #000 !important; }
+    .activity-fora { background-color: #ffb74d !important; color: #000 !important; }
+    .activity-intervalo { background-color: #ffd54f !important; color: #000 !important; }
+  </style>
+</head>
+<body>
+  <div class="container py-4">
+    <h4 class="mb-4">Cadastro de Atendentes</h4>
+
+    <form id="formCadastro">
+      <div class="row mb-3">
+        <div class="col-md-4">
+          <label for="nome" class="form-label">Nome do Atendente</label>
+          <input type="text" class="form-control" id="nome" required>
+        </div>
+        <div class="col-md-4">
+          <label for="email" class="form-label">E-mail do Atendente</label>
+          <input type="email" class="form-control" id="email" required>
+        </div>
+        <div class="col-md-4">
+          <label for="area" class="form-label">Área</label>
+          <select class="form-select" id="area">
+            <option>Atendimento</option>
+            <option>Marketing</option>
+            <option>Back Office</option>
+            <option>DG</option>
+            <option>NIM</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row mb-4">
+        <div class="col-md-4">
+          <label for="horario" class="form-label">Horário de Trabalho</label>
+          <select class="form-select" id="horario">
+            <option>06:00-15:00</option>
+            <option>07:00-16:00</option>
+            <option>08:00-17:00</option>
+            <option>09:00-18:00</option>
+            <option>10:00-19:00</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label for="pausa1" class="form-label">Pausa 1</label>
+          <select class="form-select" id="pausa1">
+            <option>10:00-10:10</option>
+            <option>10:10-10:20</option>
+            <option>10:20-10:30</option>
+            <option>10:30-10:40</option>
+            <option>10:40-10:50</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label for="pausa2" class="form-label">Pausa 2</label>
+          <select class="form-select" id="pausa2">
+            <option>14:00-14:10</option>
+            <option>14:10-14:20</option>
+            <option>14:20-14:30</option>
+            <option>14:30-14:40</option>
+            <option>14:40-14:50</option>
+            <option>15:00-15:10</option>
+            <option>15:10-15:20</option>
+            <option>15:20-15:30</option>
+            <option>15:30-15:40</option>
+            <option>15:40-15:50</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table class="table table-bordered align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>06:00-07:00</th>
+              <th>07:00-08:00</th>
+              <th>08:00-09:00</th>
+              <th>09:00-10:00</th>
+              <th>10:00-11:00</th>
+              <th>11:00-12:00</th>
+              <th>12:00-13:00</th>
+              <th>13:00-14:00</th>
+              <th>14:00-15:00</th>
+              <th>15:00-16:00</th>
+              <th>16:00-17:00</th>
+              <th>17:00-18:00</th>
+              <th>18:00-19:00</th>
+              <th>19:00-20:00</th>
+              <th>20:00-21:00</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr id="linhaAtividades"></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="row">
+        <div class="col-6">
+            <div class="text-start mt-3">
+                <a href="mockup_app_escalas.html" class="btn btn-danger">Voltar</a>
+            </div>
+        </div>
+
+        <div class="col-6">
+            <div class="text-end mt-3">
+                <button type="submit" class="btn btn-success">Salvar Atendente</button>
+            </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    const atividades = [
+      { nome: "Selecione uma atividade", classe: "activity-select"},
+      { nome: "blip chat", classe: "activity-blip" },
+      { nome: "e-mail", classe: "activity-email" },
+      { nome: "telefone", classe: "activity-phone" },
+      { nome: "BKO", classe: "activity-bko" },
+      { nome: "folga", classe: "activity-folga" },
+      { nome: "fora de escala", classe: "activity-fora" },
+      { nome: "intervalo", classe: "activity-intervalo" },
+    ];
+
+    function criarDropdownAtividade() {
+      const select = document.createElement("select");
+      select.className = "form-select atividade-select";
+
+      atividades.forEach(atividade => {
+        const option = document.createElement("option");
+        option.value = atividade.nome;
+        option.textContent = atividade.nome;
+        select.appendChild(option);
+      });
+
+      select.addEventListener("change", () => aplicarCor(select));
+      aplicarCor(select);
+      return select;
+    }
+
+    function aplicarCor(select) {
+      // Remove todas as classes anteriores
+      atividades.forEach(a => select.classList.remove(a.classe));
+      // Adiciona a nova classe baseada no valor
+      const atividade = atividades.find(a => a.nome === select.value);
+      if (atividade) select.classList.add(atividade.classe);
+    }
+
+    function montarLinhaAtividades() {
+      const linha = document.getElementById("linhaAtividades");
+      for (let i = 0; i < 15; i++) {
+        const td = document.createElement("td");
+        td.appendChild(criarDropdownAtividade());
+        linha.appendChild(td);
+      }
+    }
+
+    window.onload = montarLinhaAtividades;
+  </script>
+</body>
+</html>
